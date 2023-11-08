@@ -69,11 +69,49 @@ async function run() {
 
 //  schedules
 
+app.get('/schedules', async (req, res)=>{
+      console.log(req.query.email);
+      let query = {}
+      if(req.query?.email){
+        query = {email: req.query.email}
+      }
+       const result = await schedulesCollection.find(query).toArray();
+       res.send(result)
+})
+
+
 app.post('/schedules', async (req, res)=>{
     const schedules = req.body
     console.log(schedules);
     const result = await schedulesCollection.insertOne(schedules)
     res.send(result)
+})
+
+//  delete
+
+app.delete('/schedules/:id', async (req, res)=>{
+    const id = req.params.id
+    const query = {_id: new ObjectId(id)}
+    const result = await schedulesCollection.deleteOne(query)
+    res.send(result)
+})
+
+//  put 
+
+app.patch('/schedules/:id', async (req, res)=>{
+    const updateSchedules = req.body
+    const id = req.params.id
+    const filter = {_id: new ObjectId(id)}
+    console.log(updateSchedules);
+    const updateDoc = {
+      $set:{
+        status: updateSchedules.status
+      }
+    }
+    const result = await schedulesCollection.updateOne(filter, updateDoc)
+    res.send(result)
+
+
 })
 
 
