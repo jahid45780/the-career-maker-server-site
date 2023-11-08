@@ -28,6 +28,7 @@ async function run() {
     const serviceCollection = client.db('popularServices').collection('services');
     const allServiceCollection = client.db('popularServices').collection('allServices');
     const schedulesCollection = client.db('popularServices').collection('schedules');
+    const productCollection = client.db('popularServices').collection('product')
     //  popular service
     app.get('/services', async (req, res)=>{
          const cursor = serviceCollection.find();
@@ -112,6 +113,14 @@ app.patch('/schedules/:id', async (req, res)=>{
     res.send(result)
 
 
+})
+
+// add service
+app.post('/product', async(req,res)=>{
+  const newProduct = req.body;
+  console.log(newProduct)
+  const result = await productCollection.insertOne(newProduct)
+  res.send(result)
 })
 
 
